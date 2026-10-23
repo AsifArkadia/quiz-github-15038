@@ -4,8 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PoliController;
 use App\Http\Controllers\Admin\DokterController;
 use App\Http\Controllers\Admin\PasienController;
-use App\Http\Controllers\ObatController;
-use App\Http\Controllers\JadwalPeriksaController;
+use App\Http\Controllers\Admin\ObatController;
+use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\PeriksaPasienController;
 use App\Http\Controllers\RiwayatPasienController;
 use App\Http\Controllers\Admin\AdminPoliController;
@@ -38,30 +38,23 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+
     Route::resource('polis', AdminPoliController::class);
-            // Data Dokter
-        Route::resource('dokter', DokterController::class);
-        Route::resource('pasien', PasienController::class);
+    Route::resource('dokter', DokterController::class);
+    Route::resource('pasien', PasienController::class);
+    Route::resource('obat', ObatController::class);
 });
 
 
 // DOKTER
 
-Route::middleware(['auth', 'role:dokter'])
-    ->prefix('dokter')
-    ->group(function () {
+Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dokter.dashboard');
+    })->name('dokter.dashboard');
 
-        // Dashboard
-        Route::get('/dashboard', function () {
-            return view('dokter.dashboard');
-        })->name('dokter.dashboard');
+    Route::resource('jadwal-periksa', JadwalPeriksaController::class);
 
-
-        // Jadwal Periksa
-        Route::resource(
-            'jadwal-periksa',
-            JadwalPeriksaController::class
-        );
 
 
         // Periksa Pasien
